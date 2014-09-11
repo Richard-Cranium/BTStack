@@ -1,6 +1,9 @@
 package com.bluekitchen.btstack;
 
+import java.nio.ByteBuffer;
+import java.nio.ByteOrder;
 import java.util.Arrays;
+import java.util.UUID;
 
 // UUID stored in big endian format
 // TODO store UUID internally as LE
@@ -20,6 +23,13 @@ public class BT_UUID {
 	public BT_UUID(byte[] uuid128LE){
 		Util.flipX(uuid128LE, uuid);
 	}
+        
+        public BT_UUID(UUID inUUID) {
+            ByteBuffer bb = ByteBuffer.wrap(uuid);
+            bb.order(ByteOrder.BIG_ENDIAN);
+            bb.putLong(inUUID.getMostSignificantBits());
+            bb.putLong(inUUID.getLeastSignificantBits());
+        }
 	
 	public BT_UUID(String uuidString){
 		String parts[] = uuidString.split("-");
@@ -29,7 +39,7 @@ public class BT_UUID {
 		Util.storeNet32(uuid, 8, Long.parseLong((parts[3]+parts[4]).substring(0, 8), 16));
 		Util.storeNet32(uuid, 12, Long.parseLong((parts[3]+parts[4]).substring(8, 16), 16));
 	}
-
+        
         @Override
 	public String toString(){
 	    return String.format("%02x%02x%02x%02x-%02x%02x-%02x%02x-%02x%02x-%02x%02x%02x%02x%02x%02x",

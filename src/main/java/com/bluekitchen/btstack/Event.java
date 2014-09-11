@@ -1,5 +1,7 @@
 package com.bluekitchen.btstack;
 
+import com.bluekitchen.btstack.event.EventHandler;
+
 public class Event extends Packet {
 	
 	public Event(byte data[], int payloadLen){
@@ -21,4 +23,8 @@ public class Event extends Packet {
 		t.append(Util.asHexdump(data, payloadLen));
 		return t.toString();
 	}
+        
+        public void handle(EventHandler eh) {
+            eh.handleEvent(this);
+        }
 }
